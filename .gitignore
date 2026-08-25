@@ -195,9 +195,9 @@ cython_debug/
 .abstra/
 
 # Visual Studio Code
-#   Visual Studio Code specific template is maintained in a separate VisualStudioCode.gitignore 
+#   Visual Studio Code specific template is maintained in a separate VisualStudioCode.gitignore
 #   that can be found at https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
-#   and can be added to the global gitignore or merged into this file. However, if you prefer, 
+#   and can be added to the global gitignore or merged into this file. However, if you prefer,
 #   you could uncomment the following to ignore the entire vscode folder
 # .vscode/
 # Temporary file for partial code execution
@@ -216,3 +216,42 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ---------------------------------------------------------------------------
+# Stock Markets Analytics Zoomcamp -- repo-specific
+# ---------------------------------------------------------------------------
+
+# Data is never committed. The course project rubric says so explicitly:
+# "Please don't submit data files to GitHub."
+data/raw/*
+data/processed/*
+data/cache/*
+project/data/raw/*
+project/data/processed/*
+project/data/cache/*
+!**/.gitkeep
+
+# Trained model artefacts
+project/models/*
+!project/models/.gitkeep
+*.joblib
+*.pkl
+
+# Logs
+logs/
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# macOS
+.DS_Store
+
+# Editors
+.vscode/
+.idea/
+
+# uv.lock IS committed on purpose -- it is what makes the venv reproducible
+# for a peer reviewer. (The upstream template comments it out above.)
+!uv.lock

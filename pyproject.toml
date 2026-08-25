@@ -1,0 +1,99 @@
+[project]
+name = "stock-markets-analytics-zoomcamp"
+version = "0.1.0"
+description = "Homework and capstone project for the DataTalksClub Stock Markets Analytics Zoomcamp (2026 cohort)."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = { text = "MIT" }
+authors = [{ name = "Pathorn Kiti" }]
+
+dependencies = [
+    # --- core dataframe / numerics ---
+    "pandas>=2.2",
+    "numpy>=1.26",
+    "pyarrow>=16.0",            # parquet engine for the local data cache
+
+    # --- data sources (module 1) ---
+    "yfinance>=0.2.40",
+    "pandas-datareader>=0.10",  # FRED, Stooq
+    "requests>=2.32",
+    "lxml>=5.2",                # pd.read_html backend for Wikipedia scraping
+    "beautifulsoup4>=4.12",
+    "html5lib>=1.1",
+
+    # --- feature engineering (module 2) ---
+    "ta>=0.11",                 # technical indicators used in the lectures
+    "pandas-ta-classic>=0.6",   # maintained fork of pandas-ta (extra indicator set)
+
+    # --- modeling (module 3) ---
+    "scikit-learn>=1.5",
+    "statsmodels>=0.14",
+    "xgboost>=2.1",
+    "joblib>=1.4",
+
+    # --- visualisation ---
+    "matplotlib>=3.9",
+    "seaborn>=0.13",
+    "plotly>=5.22",
+
+    # --- notebooks ---
+    "jupyterlab>=4.2",
+    "ipykernel>=6.29",
+    "ipywidgets>=8.1",
+
+    # --- misc ---
+    "python-dotenv>=1.0",
+    "tqdm>=4.66",
+]
+
+[project.urls]
+Course = "https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp"
+Repository = "https://github.com/PathornKiti/stock-markets-analytics-zoomcamp-pathorn"
+
+[dependency-groups]
+# Installed by default with a bare `uv sync`.
+dev = [
+    "pytest>=8.2",
+    "ruff>=0.5",
+    "pre-commit>=3.7",
+    "nbstripout>=0.7",
+]
+
+# Opt-in, heavy. Only needed for module 5 (Airflow) and the project's
+# automation criterion. Install with:  uv sync --group airflow
+airflow = [
+    "apache-airflow>=2.9",
+]
+
+# Opt-in deep-learning extras for the optional neural-network part of module 3.
+dl = [
+    "torch>=2.3",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# Two importable top-level packages share the one centralised venv:
+#   `smaz`      -> reusable helpers for every week's homework
+#   `algotrade` -> the capstone project's own library code
+[tool.hatch.build.targets.wheel]
+packages = ["src/smaz", "project/src/algotrade"]
+
+[tool.uv]
+# Install this repo itself in editable mode so `import smaz` / `import algotrade`
+# resolve from any notebook or script without sys.path hacks.
+package = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["*.ipynb"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
