@@ -113,7 +113,3 @@ Anything else: prefix with `uv run` (e.g. `uv run python project/scripts/run_pip
 - [`docs/setup.md`](docs/setup.md) — environment setup and troubleshooting
 - [`docs/workflow.md`](docs/workflow.md) — the weekly homework loop
 - [`project/README.md`](project/README.md) — capstone write-up and scoring checklist
-
-## License
-
-MIT — see [LICENSE](LICENSE).
