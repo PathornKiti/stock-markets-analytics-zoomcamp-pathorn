@@ -21,6 +21,9 @@ dependencies = [
     "beautifulsoup4>=4.12",
     "html5lib>=1.1",
 
+    # --- homework data drops shared as Google Drive files (module 2 Q4) ---
+    "gdown>=5.2",
+
     # --- feature engineering (module 2) ---
     "ta>=0.11",                 # technical indicators used in the lectures
     "pandas-ta-classic>=0.6",   # maintained fork of pandas-ta (extra indicator set)

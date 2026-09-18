@@ -39,6 +39,6 @@ This module's work leans on the shared package (see `src/smaz/`):
 ## Status
 
 - [ ] Watched the lectures
-- [ ] Notebook runs top-to-bottom without errors
-- [ ] `answers.md` filled in
+- [x] Notebook runs top-to-bottom without errors
+- [x] `answers.md` filled in
 - [ ] Submitted on the course portal
