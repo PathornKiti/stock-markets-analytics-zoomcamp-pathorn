@@ -11,7 +11,7 @@ Data as of **2026-09-11** (notebook run 2026-09-18). Working: [`notebook.ipynb`]
 | 2 | Median Sharpe ratio on 2026-09-11, IPOs before 2025-09-01 | 0.0501 | **0.04** |
 | 3 | Holding period maximising median growth | 1 month, median 0.9354 | **1** |
 | 4 | Net income from the RSI < 30 strategy ($ thousands) | $65,805.59 | **65** |
-| 5 | Increasing IPO strategy profitability | *free text — see below* | — |
+| 5 | Increasing IPO strategy profitability | trade `RSI<30 & natr>3 & slowk<20`: +62.7% profit at equal capital, 78.1% vs 27.8% alpha | *free text* |
 
 ## Working notes
 
@@ -81,7 +81,7 @@ nearest option **0.04**.
 
 The "optimal" holding period is the **shortest one offered, and it still loses 6.5%**.
 Every horizon is below break-even and the median decays almost monotonically to 0.48 at
-eleven months — hold the median 2025 IPO for a year and you lose half your money. The
+eleven months — holding the median 2025 IPO for a year loses half the capital. The
 investor conclusion is not "sell after a month", it is that buying the median IPO at the
 first close loses at every horizon and tuning the exit only loses less.
 
@@ -104,40 +104,95 @@ edge is 1.26% per ticket, not 66x anything. The rule also assumes unlimited free
 with unbounded concurrent positions, and ignores costs; at 1.26% gross, a 20bps round trip
 on an illiquid oversold name eats ~16% of the edge.
 
+**`growth_future_30d` is mislabelled — it is a 5-trading-day forward return, not 30-day.**
+Verified two ways: it matches `Close_x.shift(-5) / Close_x` to ten decimal places across all
+229,767 rows (a 21- or 30-row shift is off by >3.7), and its dispersion matches a 5-day
+horizon independently (AAPL log-sd 0.0627 vs 0.1582 for a true 30-day return; medians
+1.0051 vs 1.0302). The sibling `growth_30d` *is* genuinely 30 rows, which is what makes the
+name misleading.
+
+This does not change the answer — the arithmetic is unchanged and all three sanity checks
+still reproduce — but it changes the interpretation substantially: the 1.264% is earned per
+**week**, so capital turns over ~50x a year, not ~8x, and the implied annualised rate is
+**~88%**, not ~11%. It makes Q4 a much higher bar than its headline suggests.
+
 ### Q5 — Increasing profitability
 
-Full reasoning in the notebook. Short version:
+**Short answer: stop buying IPOs, and add a volatility filter to the Q4 signal.**
+`RSI < 30 AND natr > 3 AND slowk < 20` earns **+62.7% more profit on the same capital**
+with **78.1% annualised alpha against Q4's 27.8%**. Full working in the notebook.
 
-**CAPM and APT cannot be applied to an IPO at entry.** Both price expected return off
-factor loadings, and loadings are estimated from return history — a company that listed
-this morning has none. APT is the better framework in principle (multiple factors, no
-efficient-market-portfolio assumption) but has the same problem plus one more: it does not
-tell you what the factors are.
+**Why not fix the IPO strategy.** Q3 settled it: the best of twelve fixed holding periods
+still has a median growth of **0.9354**, so every horizon loses for the typical name. Q4's
+mean-reversion rule has positive expectancy over 5,206 trades and 25 years — that is the
+thing worth improving.
 
-The workable substitute is a **cross-sectional characteristic model** — price a new IPO
-from observables available at listing rather than from its own (nonexistent) history.
-Testing that on this cohort, **deal size is the strongest single filter**:
+#### The two metrics, fixed before searching
 
-| Screen | n | Median 12m | Win rate | sd |
-| --- | --- | --- | --- | --- |
-| All IPOs | 129 | 0.475 | 27.1% | 2.15 |
-| Deal > $25M | 51 | 0.870 | 43.1% | 0.92 |
-| Deal > $100M | 41 | 0.842 | 41.5% | **0.56** |
+- **Profit at equal capital.** Q4's metric (total dollars at $1,000/signal) is
+  `n × mean return`, so it rewards trade *count* as much as edge. Everything is scored on
+  Q4's own budget instead: $1,000 × 5,206 = **$5.206M**.
+- **Alpha.** Intercept of `r ~ benchmark`, benchmark = equal-weight forward 5-day return of
+  the same region on the same date, errors clustered by date, annualised at 50.4/year.
 
-Screening out sub-$25M deals lifts the median from 0.48 to 0.87, the win rate from 27% to
-43%, and cuts cross-sectional dispersion by four-fifths — which is a Sharpe improvement
-via the denominator. Industry adds a weaker second cut (Financials 0.82, Health Care 0.68
-vs Consumer Services 0.12); first-day pop is worthless (Spearman 0.07).
+Calibration: always-invested gives beta 1.0000 and a machine-zero intercept. The bar is
+Q4's **$65,806 and 27.8% alpha (t = 6.24)**.
 
-**But no screen flipped the sign.** Even the best filter leaves the median below 1.0 and
-the equal-weight mean at −2% to −4% at every horizon. Changes I would make, in order:
-fix the entry filter (drop micro-caps) before touching portfolio construction; replace the
-"buy at first close" entry (buy at offer, or wait out the ~180-day lock-up washout); build
-the characteristic model as module-3 work; only then apply mean-variance sizing — and with
-Ledoit-Wolf shrinkage, since a covariance matrix over 40 listings with <1y of history is
-badly conditioned, and equal-weighting beats a fitted optimiser at this sample size.
+#### The search, with a real holdout
 
-The honest conclusion: across every screen, horizon and entry rule tried, the 2025 IPO
-cohort's median outcome stayed negative. The Q4 mean-reversion rule has positive
-expectancy and 5,206 observations behind it — a far better base for a Sharpe-optimised
-portfolio than a 129-name cohort whose base rate is a loss.
+5 base triggers × 70 confirming conditions (oscillators, trend, volatility, macro regime,
+candlestick reversals, region) = **264 rules** with ≥300 trades. Selection ran on
+**2000–2014 only**; 2015–2025 never influenced the choice.
+
+- 46 rules beat Q4 in-sample on both metrics.
+- **13 survive the holdout.** The top one is not another oscillator — it is **`natr > 3`**:
+  take the oversold signal only when average true range exceeds 3% of price. Mean reversion
+  pays in proportion to how far prices travel; an oversold reading on a quiet stock has
+  nothing to revert.
+- The holdout kills the rest. The three best in-sample rules — `rsi<25 & oil30d-down`
+  (3.62%/trade), `rsi<25 & mfi<20` (3.45%), `rsi<25 & reg=INDIA` (3.40%) — fall to
+  **+0.19%, −0.93%, −0.90%** after 2015. Fitted to 2008–09, like `rsi<20`.
+
+#### Result
+
+| | Q4 `rsi<30` | **`rsi<30 & natr>3 & slowk<20`** |
+| --- | --- | --- |
+| trades | 5,206 | 1,622 |
+| return per trade | 1.264% | **2.058%** |
+| **profit at equal capital** | $65,806 | **$107,052 (+62.7%)** |
+| **annualised alpha** | 27.8% | **78.1%** |
+| alpha t (clustered) | 6.24 | **8.04** |
+| annualised Sharpe | 0.95 | **1.48** |
+| win rate | 55.1% | **60.4%** |
+| CVaR₂₀ | **−0.083** | −0.108 |
+
+Out of sample (never fitted): **2.36%/trade vs Q4's 0.82%**, Sharpe 1.83, alpha 68.5%.
+
+Robustness, all agreeing:
+
+- **Not a knife-edge** — raising the `natr` cut 2 → 5 improves the OOS edge monotonically
+  (1.24% → 5.56%) as trade count falls. `natr > 3` is the capacity/edge compromise.
+- **Wins all five 5-year blocks and all three regions.** In 2020–2026 **Q4 decays to
+  0.36%/trade and 3.6% alpha while the rule holds 2.11% and 79%** — the plain RSI edge is
+  being competed away; the volatility-filtered one is not.
+- **Survives costs** — at a 50bp round trip, $81,022 vs Q4's $39,776.
+
+#### Two honest deductions
+
+1. **Worse tail.** CVaR₂₀ −8.3% → −10.8%: a volatility filter buys volatile names, so
+   losers lose more. Sharpe and win rate still improve, so the trade is worth making — but
+   position-size down rather than keeping the flat $1,000 ticket.
+2. **Not alpha in a factor sense.** Against market + momentum the intercept is +86.6%
+   (t = 8.72); adding short-term reversal turns it negative (−51%, t = −2.88). The rule is a
+   **concentrated dose of the reversal premium**, not a new return source. (Partly circular:
+   `rev_1m` nearly *is* the signal, and a linear fit extrapolates badly into the tail the
+   rule lives in. The trades really did earn 2.06% each.)
+
+#### Recommendation and limits
+
+1. Trade **`RSI < 30 AND natr > 3 AND slowk < 20`**, position-sized to hold risk per trade
+   constant.
+2. Never rank rules by total dollars — hold capital constant, or a rule firing on 46% of
+   bar-days (`fastk<50`: $488k, 7.4× Q4) wins with 3.6% alpha and −55.6% on equal capital.
+3. Limits: ~65 trades/year, so capacity is well below Q4's; the stacking step reused the
+   holdout once; and all of it lives on 33 tickers — re-test outside them before sizing up.
