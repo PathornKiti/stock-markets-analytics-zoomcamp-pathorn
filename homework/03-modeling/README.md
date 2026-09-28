@@ -58,6 +58,13 @@ Example: 'October_w1', 'November_w2', etc.
 
 **NOTE**: new dummies will be used as features in the next tasks, please leave them in the dataset.
 
+#### Choices (2 points)
+
+- [ ] 0.015
+- [x] **0.025**
+- [ ] 0.035
+- [ ] 0.045
+
 ---
 ### Question 2:  Define New "Hand" Rules on Macro and Technical Indicator Variables
 
@@ -88,6 +95,14 @@ In this task, you'll apply insights from the **visualized decision tree (`clf10`
    - Round the precision score to **three decimal places**.
      Example: If your result is `0.57897`, your final answer should be: `0.579`.
   > **Hint**: This should already be visible in the code output, as the `IS_CORRECT` and `PREDICTIONS` sets should automatically include the new columns.
+
+#### Choices (3 points)
+
+- [ ] 0.570
+- [ ] 0.575
+- [x] **0.580**
+- [ ] 0.585
+- [ ] 0.590
 
 
 
@@ -126,6 +141,13 @@ clf = DecisionTreeClassifier(max_depth=max_depth, random_state=42)
 - Count how many records in the TEST set have `only_pred5_is_correct` equal to 1.
 - Report this count as your final answer.
 
+#### Choices (3 points)
+
+- [ ] 1770
+- [ ] 2770
+- [x] **3770** — nearest option; this notebook computes **3802** (see note in `answers.md`)
+- [ ] 4770
+
 ### Advanced (Optional)
 
 - To generalize this for many prediction columns (e.g., `pred0` to `pred99`), define a function that can be applied to an entire dataframe row.
@@ -159,6 +181,13 @@ clf = DecisionTreeClassifier(max_depth=max_depth, random_state=42)
 - Using **best_max_depth**, retrain the Decision Tree Classifier on the combined TRAIN+VALIDATION set.
 - Predict on the entire dataset (TRAIN + VALIDATION + TEST) and add the predictions as a new column `pred6_clf_best` in your dataframe `new_df`.
 - Compare the precision score of the tuned tree with previous predictions (`pred0` to `pred5`). You should observe an improvement, ideally achieving precision > 0.58, indicating the tuned tree outperforms earlier models.
+
+#### Choices (2 points)
+
+- [x] **5**
+- [ ] 10
+- [ ] 15
+- [ ] 20
 
 ### Advanced (Optional)
 

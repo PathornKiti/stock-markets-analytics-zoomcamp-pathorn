@@ -3,13 +3,15 @@
 Submitted at: https://courses.datatalks.club/sma-zoomcamp-2026/homework/hw03
 Date submitted:
 
-| Q | Question | Answer |
-| --- | --- | --- |
-| 1 | Max absolute correlation of a `<month>_w<week_of_month>` dummy with `is_positive_growth_30d_future` | **0.025** |
-| 2 | Precision of the best new hand rule (`pred3` / `pred4`) on TEST | **0.580** |
-| 3 | TEST records where only `pred5_clf_10` is correct | **3802** |
-| 4 | Optimal `max_depth` (1..20) for the `DecisionTreeClassifier` | **5** |
-| 5 | What data is missing? | free text - measured experiment in `notebook.ipynb`, Question 5 |
+| Q | Question | Computed | Choice to submit |
+| --- | --- | --- | --- |
+| 1 | Max absolute correlation of a `<month>_w<week_of_month>` dummy with `is_positive_growth_30d_future` | 0.025 | **0.025** (exact) |
+| 2 | Precision of the best new hand rule (`pred3` / `pred4`) on TEST | 0.580 | **0.580** (exact) |
+| 3 | TEST records where only `pred5_clf_10` is correct | 3802 | **3770** (nearest; gap 32) |
+| 4 | Optimal `max_depth` (1..20) for the `DecisionTreeClassifier` | 5 | **5** (exact) |
+| 5 | What data is missing? | free text - measured experiment in `notebook.ipynb`, Question 5 | free text |
+
+All four validated against the executed `notebook.ipynb` (0 execution errors).
 
 ## Working notes
 
@@ -46,7 +48,36 @@ cut-points on the ZIRP years that live in TRAIN/VALIDATION.
 For reference, the lecture rules on the same TEST set: `pred0_manual_cci` 0.558 (794 calls),
 `pred1_manual_prev_g1` 0.542, `pred2_manual_prev_g1_and_snp` 0.522.
 
-**Q3 - 3802.** `DecisionTreeClassifier(max_depth=10, random_state=42)` fitted on TRAIN+VALIDATION,
+**Q3 - 3802 computed; submit 3770.** The offered options are 1770 / 2770 / 3770 / 4770, spaced
+1000 apart, so 3770 is unambiguously the intended bucket - but it is not an exact match and is
+not presented as one.
+
+A sweep over the pipeline choices that could change the fitted tree shows the count is genuinely
+sensitive, and that every spec-compliant reading lands in the 3770 bucket:
+
+| variant | count | nearest option |
+| --- | --- | --- |
+| baseline: 115 dummies, fit TRAIN+VALIDATION | **3802** | 3770 (gap 32) |
+| lecture's `ln_volume = np.log(Volume)` with `-inf` | 3802 | 3770 |
+| without the `month_wom` dummies (239 features) | 3950 | 3770 |
+| NUMERICAL only, no dummies (184 features) | 3774 | 3770 (gap 4) |
+| fit on TRAIN only - violates the spec | 3272 | 3770 |
+| no 2000-01-01 truncation - violates the lecture | 6973 | 4770 |
+
+Two conclusions. First, the `-inf` -> NaN change made to `ln_volume` is **not** the cause: both
+spellings give exactly 3802. Second, the closest variant to the grader's number (3774, gap 4) is
+the one that fits on NUMERICAL features with no dummies at all - which contradicts both the
+lecture (`features_list = NUMERICAL + DUMMIES`) and Q1's instruction to leave the new dummies in
+the dataset. That variant was **not** adopted: matching the answer key by dropping features the
+task says to keep would be fitting to the grader rather than solving the problem.
+
+The residual 32-row gap (0.1% of the 31,408 TEST rows) is most likely scikit-learn version
+tie-breaking - this repo runs sklearn 1.9.0 against a 2025-vintage course notebook, and the
+`best` splitter's feature permutation under `random_state=42` has changed between versions. A
+handful of tied splits resolving differently is enough to move the count by this much, and no
+amount of matching the course's code would close it.
+
+**Q3 detail.** `DecisionTreeClassifier(max_depth=10, random_state=42)` fitted on TRAIN+VALIDATION,
 predicted over the whole frame (same length and row order, so the result is a plain column
 assignment). TEST precision 0.589. `only_pred5_is_correct` is computed from the `is_correct_*`
 columns rather than hard-coded per rule, so it scales to `pred0..pred99`. Count on TEST =
