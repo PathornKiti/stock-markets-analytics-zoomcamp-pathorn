@@ -75,10 +75,10 @@ here (Stage 3).
   * In 2020 C3 lost 23% in the COVID year, while AP lost 8%.
 * **2021-24: the same strategy.** Both processes picked the same C2 score-tilted book.
 * **2026: AP was worse.** It picked inverse-vol weighting over S5's equal weight and lost 3.8 points.
-* **The 2016-20 gap is not just C3 being left out of my grid** (post-hoc check D3).
-  * I added C3 under all 12 constructions and re-ran the walk-forward. It picked exactly the same configs every year.
+* **The 2016-20 gap is not just C3 being left out of the grid** (post-hoc check D3).
+  * C3 was added under all 12 constructions and the walk-forward re-run. It picked exactly the same configs every year.
   * In every selection window, WFC EW N10 had a higher net α t than any weekly C3 book.
-  * Caveat: the S5 record's C3 pick rebalanced monthly, which my weekly-only grid cannot reproduce.
+  * Caveat: the S5 record's C3 pick rebalanced monthly, which the weekly-only grid cannot reproduce.
 
 ### Sub-periods and regimes (net, exact)
 

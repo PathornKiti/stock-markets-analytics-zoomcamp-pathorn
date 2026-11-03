@@ -20,7 +20,7 @@ Ranked by expected value × feasibility. "Thai evidence" means studies on the SE
 
 ## Recommended order
 
-1. **Get history.** Ask the university library / thesis advisor for SETSMART, Bloomberg or Refinitiv access, or ask SET
+1. **Get history.** Request SETSMART, Bloomberg or Refinitiv access through an institutional library, or ask SET
    Information Services (infoproducts@set.or.th) about SETSMART / SMART Marketplace educational terms. This one step
    unlocks #1, #3, #4 and #5.
 2. **Start forward collection today.** Copy NVDR trading by stock and investor-type trading into the CSV templates

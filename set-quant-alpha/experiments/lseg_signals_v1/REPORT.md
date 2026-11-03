@@ -85,7 +85,7 @@ Gates: S1 information pass (LC_all FM t 3.6), S2 pass, S3 **fail** (Sharpe 0.39 
   * It is clean point-in-time: it uses the report timestamp.
 * **StarMine Combined Alpha confirms that analyst-plus-value composites predict Thai returns live.**
   * As a licensed vendor score it needs an LSEG licence to use.
-* **Forward-test candidates** (registered by the user, forward data only):
+* **Forward-test candidates** (registered separately, forward data only):
   * `surp` added to C2;
   * a value tilt (forward dividend yield; fundamentals_v1's bp/ep).
   * The dividend-yield evidence is 2022-26 only.

@@ -112,7 +112,7 @@ This check reused existing integrated_v1 configs (Yahoo universe), so it adds no
   * A 10-stock book is noisy enough that ±3 points a year between variants is indistinguishable.
   * After 757 trials no backtest variant can clear the multiple-testing hurdle.
   * More strategy search on 2013-26 cannot fix that. Only out-of-sample (live) data can.
-* **The most consistent new evidence across all of tonight's experiments is diversified, slow information:**
+* **The most consistent new evidence across the November 2026 experiments is diversified, slow information:**
   * FC here (IC t 4.1 and 4.3);
   * the slow composites in alpha_portfolio_v1 (twice C2's net spread);
   * possibly foreign-board activity after 2022 (foreign_v1).

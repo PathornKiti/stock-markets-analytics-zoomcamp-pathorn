@@ -107,8 +107,8 @@ with its own registration date**; S1-S4 (frozen 2026-11-02) keep using today's w
 ## 6. Caveats
 * Signal-level only; no cost/portfolio effect of the extra score churn was simulated. Policy choice rests on 6 years (2016-21; ~290 independent 5-day targets/year); differences < 0.005 IC are undetectable. 2022-26 was seen
   by other experiments (reported once, not used).
-* Hyperparameters were tuned on 2020-21 with a train-only fit (production `tune`); I did not retune per window (a 3y window might prefer a stronger regulariser). XGB/logit only (RF/tree not in the ensemble).
+* Hyperparameters were tuned on 2020-21 with a train-only fit (production `tune`); hyperparameters were not retuned per window (a 3y window might prefer a stronger regulariser). XGB/logit only (RF/tree not in the ensemble).
 * Training pool is the liquid universe (~0.1-0.45M rows), so no subsampling was needed. Feature float32 cast has negligible effect (A-exp matches strategy_v3).
 * Monthly drift/lead-lag panel: 156 overlapping months, ~18 predictors; treat all correlations as hypotheses. PSI uses a month of data against a fixed Jan-1 reference, so it rises mechanically within the year.
-* The demo challenger-vs-production evaluation I ran was invalid on purpose-built grounds (production models are trained through Oct-2026, so scoring them on Jul-Sep 2026 is in-sample); the registry must score the champion live, point-in-time only. The demo outputs were deleted.
+* A demo challenger-vs-production evaluation was invalid by construction (production models are trained through Oct-2026, so scoring them on Jul-Sep 2026 is in-sample); the registry must score the champion live, point-in-time only. The demo outputs were deleted.
 * output/fits (187 MB) is regenerable cache; do not commit.

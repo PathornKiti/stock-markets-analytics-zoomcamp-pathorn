@@ -95,7 +95,7 @@ The combined dataset has **2,457,884 rows** (stock-days), 83 columns before dumm
 Notes:
 * The SET website blocks automated downloads, so investor-type flows are not scraped. Foreign-flow behaviour is
   proxied by the baht, the EM ETF (price and volume shocks), and stock betas to both. The optional CSV hook lets the
-  real series be added by hand (the planned master-thesis extension). Templates for both hand-collected files are in
+  real series be added by hand (a planned extension). Templates for both hand-collected files are in
   [docs/templates/](templates/): copy the day's table from the SET website after the close and append one row
   per day (and per stock for NVDR). Collecting from today gives a forward, point-in-time dataset.
 * External flow and event data are **research features**: `config.USE_FLOW_FEATURES = False` keeps them out of the
@@ -906,7 +906,7 @@ of 3 Nov 2026 (prices to 2 Nov 2026).
 
 | Tab | Question it answers | What is on it |
 | --- | --- | --- |
-| **Today** | What do I buy at the next open? | the 10 S5 stocks with weights, share counts and expected 5-day alpha; market regime; "is the signal still working?" (rolling 60-day IC, green / amber / red); paper-trading status of the six shadows |
+| **Today** | What to buy at the next open? | the 10 S5 stocks with weights, share counts and expected 5-day alpha; market regime; "is the signal still working?" (rolling 60-day IC, green / amber / red); paper-trading status of the six shadows |
 | **Performance** | How has it done? | headline cards (return since 2022, Sharpe, worst drawdown, CAPM alpha, walk-forward 2016-26, cost drag); equity curve vs TDEX and E1-E6; drawdowns; monthly returns vs TDEX; calendar-year table; full factsheet |
 | **Factors** | Is it skill or just factor exposure? | alpha against CAPM, Fama-French 3, Carhart (emerging-market and local Thai), net and gross of costs; factor loadings of every backtest design |
 | **Signal** | Does the model rank stocks well? | rank IC 0.050 (t 5.6); signal-decay monitor since 2013; returns by score decile; decay by horizon; IC by year; Fama-MacBeth test against known factors; turnover; fundamental law of active management |
@@ -1171,17 +1171,17 @@ is seen.
   cover the stop-free E2, the TDEX + neutral-tilt optimiser and a slower blended score. The live record, not more
   backtests, will decide between them.
 * Add the real **foreign-flow data** (SET investor-type and per-stock NVDR trading) instead of proxies. This is the
-  planned master-thesis extension: *is the reversal alpha compensation for providing liquidity to foreign sellers?*
+  planned extension: *is the reversal alpha compensation for providing liquidity to foreign sellers?*
 * Hedge size as well as beta (a long-short against an equal-weight basket or SET100 futures). Widening the universe
   did not help (strategy_v4): the stronger IC in smaller names needs a different execution style (longer holds,
   smaller positions, limit orders).
 * Earnings events (events_v1): reports inside the holding window raise crash risk but not the mean alpha, so an
   exclusion filter is not justified. The EPS surprise is a weak but orthogonal signal (IC 0.02, positive in 2 of 3
-  periods) and the best thesis candidate, ideally with SETSMART / Bloomberg consensus data.
+  periods) and the best candidate for further research, ideally with SETSMART / Bloomberg consensus data.
 * Point-in-time constituents, including delisted stocks, to remove survivorship bias. Done for SET100 with LSEG
   (survivorship_v1): the bias is small and not significant.
 * Per-stock foreign demand (foreign_v1, LSEG foreign-board lines). It fails discovery in 2013-21 but predicts in
-  2022-26 (IC t 3.3-3.6). This is a forward-test hypothesis for the thesis, not a result.
+  2022-26 (IC t 3.3-3.6). This is a forward-test hypothesis, not a result.
 * Analyst consensus and fundamentals (fundamentals_v1, LSEG I/B/E/S). Revisions and upgrades predicted alpha in
   2013-21 and value predicted it in 2022-26; only their equal blend was stable (IC t 4.1 / 4.3). Inside the ML
   model they add nothing (IC +0.0015, t 0.9), so S5 is unchanged.

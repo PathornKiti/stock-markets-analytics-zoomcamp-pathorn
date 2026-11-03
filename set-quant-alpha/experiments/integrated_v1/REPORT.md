@@ -3,7 +3,7 @@
 Code: `integrated_v1.py` (stages `panel`, `grid`, `wf`), `make_v8_wf.py`, `diagnostics.py`. Tables are in
 `output/tables.md`; the protocol was frozen in `output/protocol_frozen.txt` (09:40Z, before any selection).
 
-**Verdict:** no integrated, honestly tuned strategy beats TDEX or the factor models with significance. The
+**Verdict:** no integrated strategy tuned out of sample beats TDEX or the factor models with significance. The
 walk-forward strategy earned 7.8% a year net against TDEX's 7.2% (2016-01 to 2026-10). Every net alpha is positive but
 not significant (t 0.3-1.1), DSR is 0.16 and PBO is about 0.6.
 

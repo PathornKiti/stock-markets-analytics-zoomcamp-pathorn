@@ -107,8 +107,6 @@ Market beta to TDEX is 0.62.
 | Does the model pick stocks well? | **Yes.** The signal is significant after 795 trials, and the strategy beats its own universe with t 2.04 |
 | Does it beat TDEX after realistic costs? | **Yes on CAGR, Sharpe and drawdown**, but by too little to be statistically certain |
 | Does it earn significant alpha against CAPM, Fama-French or Carhart? | **No.** Every alpha is positive, every t-stat is below 2 |
-| Why not? | Trading costs (2.1% a year at 11× turnover) absorb about 40% of the gross alpha, and 10 years is too short to prove an edge this size |
-| Is it ready for real capital? | **No-go yet.** It is being paper-traded live as shadow S5. Review about May 2027 |
 
 ## Appendix B. How the test was done
 
@@ -159,7 +157,7 @@ Market beta to TDEX is 0.62.
 
 | Benchmark | Question it answers | Method |
 | --- | --- | --- |
-| TDEX buy and hold | Better than what I could buy cheaply? | CAGR, Sharpe, drawdown; active return t-stat |
+| TDEX buy and hold | Better than a cheap passive alternative? | CAGR, Sharpe, drawdown; active return t-stat |
 | Equal-weight tradable top-100 | Does stock selection add value within the universe? | Active return vs the universe (no costs charged to the universe) |
 | CAPM | Alpha after market exposure | r − rf = α + β(TDEX) + ε; daily; Newey-West (5 lags) t-stats |
 | Fama-French 3 (EM) | Alpha after market, size, value | Monthly, USD (THB returns converted with USD/THB); Ken French EM factors; Newey-West (3 lags) |

@@ -60,7 +60,7 @@ The holdout (2022-26) then shows a different picture:
 ## What to do with it
 
 * **Not a trading change.** Nothing passes, so S5 is unchanged and no shadow is proposed from this experiment.
-* **For the thesis.** The foreign-board signal is a clean, pre-registered negative-then-positive finding. A new,
+* **For further research.** The foreign-board signal is a clean, pre-registered negative-then-positive finding. A new,
   separate pre-registration could test the hypothesis "fshare20 (20-day) predicts alpha after 2022" on **future data
   only**, for example a paper shadow S7 = C2 + fshare20 from its registration date. It would also need per-stock NVDR
   flows (SET website templates in `docs/templates/`), which cover all stocks, not only those at the foreign limit.

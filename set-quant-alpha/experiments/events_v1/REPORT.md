@@ -60,6 +60,6 @@ the decision periods.
   overlay.
 * The earnings-window effect is a **risk** effect (fatter tails), not an alpha effect. If used later, it belongs in
   position sizing, not in exclusion.
-* **The EPS surprise is the best candidate for the thesis.** It is orthogonal to the price signal. Its weakness may
+* **The EPS surprise is the best candidate for further research.** It is orthogonal to the price signal. Its weakness may
   come from Yahoo's thin consensus coverage for Thai names, so it should be retested with better consensus data
   (SETSMART / Bloomberg).
