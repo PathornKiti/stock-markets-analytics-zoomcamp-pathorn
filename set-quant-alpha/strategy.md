@@ -4,8 +4,8 @@ S5 is the strategy this project deploys. It is the best design found across 795 
 
 * **What it does.** Every week it ranks the 100 most-traded Thai stocks with two machine-learning models. It then holds
   the 10 best, in equal amounts.
-* **Status.** It is paper-traded live (fake money, real prices) from 2 November 2026 under rules frozen at
-  2026-11-02T10:56:17Z.
+* **Status.** It is registered for live paper trading (fake money, real prices) from 2 November 2026, under rules
+  frozen at 2026-11-02T10:56:17Z.
 * **Results.** How well it did, and how sure we are, is in [result.md](result.md).
 
 ![Strategy S5 flow](docs/strategy_flow.png)

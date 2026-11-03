@@ -144,7 +144,7 @@ docker compose exec airflow cat /opt/airflow/standalone_admin_password.txt   # a
   Unpausing the daily DAG starts the live paper-trading record. That record is append-only, so it is a one-way
   step.
 * **The dashboard** is at <http://localhost:8000> and always shows the latest report. A tour of its six tabs, with screenshots, is in
-  [README section 9.2](README.md#92-dashboard-tour).
+  [technical report section 9.2](docs/technical_report.md#92-dashboard-tour).
 * **One run without Airflow:** `docker compose run --rm pipeline --mode live`.
 * **Stop:** `docker compose down`. Data, models and reports stay in the host folders, so the next start continues where it
   left off.

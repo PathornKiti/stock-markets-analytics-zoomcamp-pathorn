@@ -35,64 +35,21 @@ alternative any investor could buy instead.
    * S5 trades a lot (it turns the portfolio over about 11 times a year).
    * Thai brokerage and exchange fees then take about 2% a year, roughly 40% of the extra return before costs.
 4. **Realistic expectation: around market return, not above it.**
-   * Two effects made the backtest look 1-3 points a year better than reality (section 4): which weekday the
+   * Two effects made the backtest look 1-3 points a year better than reality (see Caveats): which weekday the
      portfolio rebalances, and stocks that were later delisted.
 5. **Decision: not ready for real money.**
-   * S5 has been paper-traded with fake money since 2 November 2026, under rules fixed in advance.
+   * S5 is registered for paper trading (fake money, real prices) from 2 November 2026, under rules fixed in
+     advance.
    * It is reviewed about May 2027.
 
-## 1. What could make it a "go"
+## Caveats
 
-| Condition | Why |
-| --- | --- |
-| 6-12 months of live paper trading at or above TDEX after costs | Only data no test has seen can prove the edge |
-| A cheaper broker (about 0.08% commission instead of the 0.15% average) | Costs would roughly halve, which matters more than any model change |
-| No live drawdown much worse than TDEX's | The backtest's worst fall was −35%. An investor must be able to sit through that |
-
-## 2. Can it be improved? What we tried (November 2026)
-
-We used professional data from LSEG (Refinitiv) to test whether more information makes S5 better. Every test had its
-rules written down **before** looking at the results. Decisions used 2013-21 only, and 2022-26 was a final check.
-
-| Idea | Result | Kept? |
-| --- | --- | --- |
-| Include delisted stocks (remove "survivor" bias) | Changes S5 by −0.4 points a year (2013-26). Not significant | Noted as a caveat |
-| Foreign-investor demand per stock | Not predictive in 2013-21. Predictive in 2022-26 only | No (idea for future research) |
-| Analyst forecasts, value ratios (P/B, P/E) | Signals take turns working: forecasts before 2022, value after. Inside the model they add nothing | No |
-| 13 more signals (price targets, earnings surprises, dividends, ESG, ...) | A blend beat S5 in 2013-21 (17.3% vs 16.0%) but lost in 2022-26 (4.5% vs 7.7%) | No |
-| Earnings surprise alone | The one new signal that worked in both periods. S5 already captures most of it | No (candidate to watch) |
-| Signal weights that adapt to recent performance | Adapts, but too late: lost in 2013-21 | No |
-| Holding 20 or 30 stocks instead of 10 | Lower return, and no steadier | No |
-
-**Conclusion: S5 stays exactly as it is.** The extra data did not produce an improvement that held up in both
-periods. The sensible next step is to let the live paper record accumulate, not to search for more variants.
-
-## 3. How sure are we?
-
-* **Many versions were tried.** That makes it easy to find something that worked by chance, so the bar for "real" is
-  raised to match: a t-statistic of 4.0 instead of the usual 2.
-  * In total, 795 strategy and model versions were tested (up to 3 November 2026).
-* **The stock-ranking signal clears that bar** (t 4.3).
-* **The strategy's extra return over TDEX and over factor models does not.**
-  * All estimates are positive, but every t-statistic is below 2.
-  * 10 years is too short to prove an edge of this size.
-
-## 4. Caveats in plain words
-
-* **Rebalance-day luck.** S5 rebalances once a week, on a fixed day.
-  * Re-running the same rules on each of the 5 possible weekdays, the usual day turned out about 1.6 points a year
-    luckier than the average (2013-26: 13.0% vs 11.4%; [adaptive_v1](experiments/adaptive_v1/REPORT.md)).
-  * In 2022-26 alone, the average-day result (6.0%) was slightly below TDEX (6.7%).
-  * This was measured on S5's fixed rules. The deployed track record was not re-run this way, but it probably shares
-    part of the luck.
-* **Delisted stocks.** The free Yahoo data only lists today's stocks.
-  * Adding the 50 missing SET100 stocks (44 of them delisted) from LSEG lowers results by 0.4-1.7 points a year. This
-    is not significant ([survivorship_v1](experiments/survivorship_v1/REPORT.md)).
-  * Treat 7.4% as up to 1-2 points optimistic.
-* **The test years were used more than once.** 2022-26 was examined by several experiments before the final design.
-  This is why the significance bar counts all 795 versions, and why live paper trading is the real test.
-* **Costs are an average retail estimate** (0.168% per side, below). Larger investors or cheaper brokers pay less.
-* **Losses can be large.** The backtest's worst fall was −35%, similar to the market's.
+* **Rebalance day matters.** Averaged over the 5 possible weekly rebalance days, the S5 rules earn about 1.6 points a
+  year less than on the usual day ([adaptive_v1](experiments/adaptive_v1/REPORT.md)).
+* **Delisted stocks are missing from Yahoo.** Adding them lowers results by up to 1-2 points a year, which is not
+  significant ([survivorship_v1](experiments/survivorship_v1/REPORT.md)).
+* **The edge is not proven.** 795 versions were tested, so the bar is t 4.0. The signal clears it (t 4.3); the
+  strategy's extra return does not. Live paper trading is the real test.
 
 ---
 

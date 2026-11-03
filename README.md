@@ -48,7 +48,7 @@ Module folders mirror the upstream course repo, so `homework/03-modeling/` lines
 │       ├── answers.md        # final answers, submission-ready
 │       └── notes.md          # lecture notes
 │
-├── set-quant-alpha/          # capstone — see set-quant-alpha/README.md for the write-up and rubric checklist
+├── set-quant-alpha/          # capstone — see set-quant-alpha/README.md for the write-up
 │   ├── notebooks/            # 01_eda → 05_report
 │   ├── src/algotrade/        # ingest → transform → model → strategy
 │   ├── scripts/run_pipeline.py
@@ -112,4 +112,4 @@ Anything else: prefix with `uv run` (e.g. `uv run python set-quant-alpha/scripts
 
 - [`docs/setup.md`](docs/setup.md) — environment setup and troubleshooting
 - [`docs/workflow.md`](docs/workflow.md) — the weekly homework loop
-- [`set-quant-alpha/README.md`](set-quant-alpha/README.md) — capstone write-up and scoring checklist
+- [`set-quant-alpha/README.md`](set-quant-alpha/README.md) — capstone write-up
