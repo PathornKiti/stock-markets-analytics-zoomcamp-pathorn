@@ -14,9 +14,20 @@ An end-to-end algo-trading system for the **Stock Exchange of Thailand**:
 | [result.md](result.md) | the result in plain words, plus detailed tables |
 | [docs/technical_report.md](docs/technical_report.md) | the full technical report: every section, table and experiment |
 
+**New to the Thai market?** A quick primer:
+
+| Term | Meaning | US equivalent |
+| --- | --- | --- |
+| **SET** | the Stock Exchange of Thailand (Bangkok, UTC+7): about 850 common stocks on the main board and mai, its smaller-company board; the market closes at about 16:30 local time | NYSE / Nasdaq |
+| **SET50 / SET100** | indices of the 50 / 100 largest and most liquid Thai stocks | S&P 500 |
+| **TDEX** | the ThaiDEX SET50 ETF, an exchange-traded fund that tracks the SET50. It is this project's benchmark: buying and holding it is the cheap, passive alternative to S5 (Yahoo Finance has no usable SET-index history, so the investable ETF is used) | SPY |
+| **THB, baht** | the Thai currency; foreign investors' flows move with it | – |
+| **Board lot** | Thai shares trade in multiples of 100, so the simulations buy whole lots | – |
+| **Trading cost 0.168% per side** | average Thai online-broker commission (0.15%) plus exchange fees and 7% VAT, charged on every buy and every sell | – |
+
 **Result (2016-26, walk-forward out of sample, after 0.168% per side Thai trading costs):**
 
-| | S5 (deployed) | TDEX (SET50 ETF, buy and hold) |
+| | S5 (deployed) | TDEX (SET50 ETF, buy and hold; see primer above) |
 | --- | --- | --- |
 | Return per year (CAGR) | **7.4%** | 7.2% |
 | Sharpe ratio | **0.57** | 0.53 |
