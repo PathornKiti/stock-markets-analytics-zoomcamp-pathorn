@@ -1,0 +1,93 @@
+alpha_portfolio_v1 - pre-registration
+frozen 2026-11-02T16:05:17Z - before any code of this experiment was run (no diagnostic, combination or portfolio simulation computed)
+
+PRIOR KNOWLEDGE (disclosed): integrated_v1 results are known (C2 = ML+V8 was its hindsight best; the ML-only and
+IR-objective ablations looked better; 2022-26 reviewed many times). The grid below includes C2 because it is the
+deployed S5 score (the baseline), not because of its hindsight rank. Nothing below is selected on 2022-26.
+
+DATA: integrated_v1 cached panel (8 walk-forward signals ml, v8, lowbeta, lowvol, resmom, hi52, eps, divy, as
+daily pct ranks inside the tradable top-100; forward beta-adjusted alphas h = 5/10/20, next-open to close t+h),
+2013-01-02 .. 2026-10-22. Extra point-in-time fields from data/processed/dataset.parquet: idio_vol, vol_60, amihud_20,
+dvol60, walk-forward filtered hmm_state; static Yahoo sector. Daily close-to-close returns from data/raw/prices.parquet.
+
+HYPOTHESES
+H1 (diagnostics): some of the 8 signals' IC is largely style exposure (size, beta, momentum, volatility,
+   liquidity, sector); flagged if the Fama-MacBeth slope with style controls has |t| < 2 while the raw slope has t >= 2,
+   or the mean cross-sectional R^2 of the signal on the styles (+ sector dummies) is > 0.5.
+H2 (correlation control): a combination that accounts for signal correlation (ICIR-shrunk, Lowdin-orthogonalised,
+   mean-variance on the IC covariance, cluster-equal) has a better walk-forward cost-adjusted top-decile spread than
+   equal-weight or plain IC-weighted ranks.
+H3 (construction): a cost-aware construction (alpha-hysteresis top-N, or constrained mean-variance with a linear cost
+   term) applied to the walk-forward composite beats the S5 rule net of 0.168%/side, walk-forward 2016-26.
+
+STAGE 1 - diagnostics (descriptive only; nothing here is used for selection): per signal, daily rank IC vs h = 5/10/20
+alpha, ICIR, Newey-West t (lags = h); IC decay incl. marginal windows days 6-10 and 11-20 (differences of the
+cumulative alphas); IC by year and by walk-forward HMM regime; decile monotonicity (D10-D1, Spearman of decile means);
+rank autocorrelation (lags 1/5/20) and top-decile turnover; breakeven cost per side = top-decile spread / (2 x
+turnover), weekly and monthly non-overlapping; Fama-MacBeth slopes (z-scored, daily) raw / with styles (size = log
+60d traded value, beta 120d, momentum 12-1, volatility 60d, illiquidity = log Amihud 20d; a signal's own
+characteristic is dropped from its controls) / with styles + sector; style exposures (mean daily Spearman with each
+style; mean R^2 on styles + sector dummies).
+
+STAGE 2 - combination schemes. Signal weights for year Y use only daily ICs (h = 5) whose forward window ends before
+Y, expanding window from 2013 (>= 120 days, else equal weights; 2013 = equal weights):
+  K1 EW8   equal-weight centred ranks of all 8                    K2 ICW   w ~ max(mean IC, 0)
+  K3 ICIRS w = 0.5 x max(ICIR,0)/sum + 0.5 x 1/8 (shrink to equal) K4 ORTH  Lowdin (symmetric) orthogonalisation of
+           the 8 z-scored rank vectors each day, then K2 weights from the orthogonalised signals' own past ICs
+  K5 MVIC  w = argmax w'mu - 1/2 w'S w, w >= 0 (normalised to sum 1), mu = mean daily IC, S = Ledoit-Wolf
+           covariance of the daily IC series                     K6 CLUS  average-linkage clustering of the signals on
+           1 - corr(daily IC); cut at distance 0.5; mean rank within a cluster; equal weight across clusters with
+           positive past mean IC
+  plus the existing C1 (ML) and C2 (ML+V8 = S5's score).
+WFC (walk-forward composite): for each year Y >= 2014 pick, among {C1, C2, K1..K6}, the composite with the highest
+t-stat of its weekly NET top-decile spread over 2013..Y-1 (decision days every 5 trading days counted from each year's
+first day, forward windows ending before Y): spread = mean 5d alpha of the top decile - universe mean, minus
+2 x 0.168% x top-decile turnover since the previous decision day. 2013 uses K1. Reported: ENB (exp entropy of IC
+correlation eigenvalues and (sum l)^2 / sum l^2), diversification ratio sum|w| sd / sqrt(w'Sw) on the IC covariance,
+time-series correlation of daily ICs and of daily long-short (top - bottom tercile) returns, mean cross-sectional
+score correlation.
+
+STAGE 3 - construction grid (24 configs) = score {C2, WFC} x 12 constructions; all weekly (decision every 5 trading
+days from each year's first day), long-only, fully invested in stocks, tradable top-100, decision at close, fill next
+open, 0.168%/side, a held name is resized only if its weight moves >= 1% of equity (integrated_v1 rule):
+  EW-B  N {10, 20}: top-N equal weight, keep a held name while in the top 3N (N10 on C2 = the S5 rule)
+  TILT-B N {10, 20}: as EW-B, weights linear 1.5 -> 0.5 by score rank
+  IV-B  N {10, 20}: as EW-B, weights ~ 1 / vol_60
+  HYS   N {10, 20}: equal weight; cost-aware hysteresis - replace a held name by an outside candidate only if
+        alpha_cand - alpha_held > 2 x 0.168% (round trip); alpha = Grinold IC_20 x idio_vol x sqrt(20) x z(score),
+        IC_20 = the score's mean daily IC at h = 20 over data ending before Y (2013: 0.05 a priori)
+  MVO   lambda {3, 30} x neutral {off, on}: max a'w - lambda/2 w'S w - 0.168% x sum|w - w0|; a as HYS (20-day),
+        S = 20 x Ledoit-Wolf covariance of 120 daily returns; s.t. sum w = 1, 0 <= w <= 10%, sector <= 30%;
+        candidates = top 40 by score + held (+ top 20 by traded value when neutral); neutral = |size z exposure -
+        target| <= 0.5 and |beta z exposure - target| <= 0.5, target = traded-value-weighted tradable universe
+        (SET100-like, closer to TDEX); if SLSQP fails the bands are dropped that day (count reported); weights < 0.5% -> 0.
+SELECTION: each year Y = 2016..2026 choose the config with the highest NET CAPM-alpha t vs TDEX (daily, Newey-West
+5 lags) over 2013-01-01 .. Y-1-12-31, among configs with two-way turnover <= 40x/yr in that window (the S5 objective);
+one continuous simulation follows the schedule (switch trades paid). Confirmed with exact 100-share lots, THB 1M.
+PRE-DECLARED ABLATIONS (counted): A1 WF schedule + 15% ex-ante vol target (cash remainder); A2 MVO lambda 3 / 30 on
+WFC without the cost term (2); A3 IR-vs-TDEX objective; A4 WF restricted to score = C2 (construction effect only).
+NEIGHBOURHOOD (counted): one-at-a-time perturbations of the 2026 pick as a fixed 2016-26 design: N -/+ 5, buffer
+2N / 4N, lambda x0.5 / x2, cost hurdle x0.5 / x2, name cap 7.5% / 15%, rebalance 10d (only those that apply, <= 8).
+
+STAGE 4 - robustness of the WF strategy (AP) vs S5 and TDEX, 2016-01-04 .. 2026-10-22: S5 = the deployed record
+(integrated_v1 WF, exact lots, 0.168%) and, for reference, the fixed S5 rule (C2 EW-B N10) in this harness. Net and
+gross CAGR, Sharpe, max DD, IR vs TDEX, CAPM / FF3-EM / Carhart-EM / local-Thai Carhart (+ net-factor version) alphas
+(Newey-West), cost sensitivity 0.08 / 0.10 / 0.125 / 0.15 / 0.168 / 0.20 / 0.25 %/side (same trades, and re-run
+with the cost in the objective), sub-periods 2016-19 / 2020-21 / 2022-26 and HMM regimes, stationary bootstrap
+(Politis-Romano, mean block 21 days, 5000 draws, seed 0) of Sharpe(AP) - Sharpe(S5) and of Sharpe(AP) - Sharpe(TDEX),
+PBO-CSCV (16 blocks, Sharpe and alpha t, 24 configs, 2013-26), DSR and HLZ haircut with the updated trial count,
+MinTRL, capacity (setalpha.risk square-root impact), turnover / cost-drag breakdown by year.
+
+TRIALS: K1-K6 (6) + WFC (1) + 24 grid + WF meta (1) + ablations (5) + neighbours (<= 8) = at most 45; the exact
+number is added to validity.TRIALS["alpha_portfolio_v1"].
+
+PASS / FAIL GATES (AP = WF strategy, exact lots, net, 2016-01-04 .. 2026-10-22; S5 = deployed WF record):
+G1 beats S5: net CAGR(AP) > net CAGR(S5) and Sharpe(AP) > Sharpe(S5)
+G2 beats TDEX: net CAGR(AP) > TDEX CAGR and IR vs TDEX > 0
+G3 time-stable: net CAGR(AP) - net CAGR(S5) > 0 in both 2016-21 and 2022-26
+G4 neighbour-stable: >= 2/3 of the pick's neighbours have 2016-26 net CAGR > S5's
+G5 not overfit: PBO (CSCV, Sharpe, 24 configs, 2013-26) < 0.5
+G6 significant: stationary-bootstrap one-sided p(Sharpe(AP) - Sharpe(S5) <= 0) < 0.05
+G7 deflated: DSR > 0.95 at the updated trial count
+Verdict "improves" = G1-G5 pass -> a proposed S7 paper shadow is written (not registered).
+"Significant / capital-ready" = G1-G7 pass. Otherwise the verdict is "does not improve" and no S7 is proposed.

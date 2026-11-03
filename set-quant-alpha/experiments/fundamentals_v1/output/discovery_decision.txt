@@ -1,0 +1,4 @@
+discovery decision written 2026-11-02T17:40:45.338760+00:00
+pick (max net CAPM alpha t, 2013-21, among B/C/D): D
+G1 information gate: False   G2 beats A on 2013-21: True
+ML compare 2013-21: {"IC ml": 0.08112075901153938, "IC ml_F": 0.08258578959758285, "diff": 0.0014650305860434702, "diff NW t": 0.8632125394541144, "IC C2": 0.07294633223346515, "IC C2F": 0.07433671344668084, "ml_F > ml in years": "5/9"}

@@ -1,0 +1,5 @@
+discovery decision written 2026-11-03T02:09:02.035693+00:00
+signals passing G1+G2 (horizons): {"sue": [5], "surp": [5], "disp": [5, 20], "dpsrev3": [20], "iss": [5], "ca": [5, 20]}
+LC_sel members: ['disp', 'dpsrev3', 'iss', 'sue', 'surp']
+pick (max net CAPM alpha t, 2013-21, among ['E', 'F', 'G']): F
+S1 information gate: True   S2 beats A on 2013-21: True

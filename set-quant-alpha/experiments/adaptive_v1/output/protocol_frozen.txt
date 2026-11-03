@@ -1,0 +1,41 @@
+adaptive_v1 - protocol (frozen before any of these strategies or the 3-year ML is computed)
+
+Question. Three ideas from lseg_signals_v1 / fundamentals_v1:
+  (1) signals rotate -> weight them by recent performance, or refit ML on recent years only;
+  (2) a 10-stock book is too path dependent -> hold 20 or 30 names;
+  (3) the I/B/E/S earnings surprise is the one signal that held in both periods -> add it to S5's score.
+
+Honesty note. 2022-26 is BURNED for this experiment: the signal pool, the surprise signal and the N20/N30 grid rows
+were all looked at on 2022-26 earlier. All decisions use 2013-21 only; 2022-26 is reported as a consistency check,
+not as a holdout. Any candidate is for a forward-only paper shadow registered by the user.
+
+Universe and engine. Survivorship-corrected L, tradable top-100, lseg_signals_v1 output/frame.parquet ranks,
+iv.fast_sim, next-open fills, 0.168%/side, weekly (R5), buffer min(3N, 80), equal weight, no stop.
+Baseline A = C2 (S5), N10.
+
+Strategies
+  S1a ICW: adaptive weights. Pool = 19 ranked signals: ML (pred_ens), V8, rev1, rev3, recup3, bp, ep, roe, ptup,
+      ptrev3, sue, surp, smartdiv, disp, fdy, dpsrev3, gpa, accr, iss (sign-adjusted; esg and StarMine excluded).
+      On the first trading day of each month, w_k = max(mean daily 5-day rank IC over the trailing 504 trading
+      days ending 6 trading days before the decision, 0); weights normalised to sum 1. Fewer than 250 IC days, or
+      all weights 0 -> C2. Score = sum_k w_k (rank_k - 0.5), missing rank = 0.5. N10.
+  S1b ML3: ML refit each January on the last 3 calendar years only (same features, members, hyperparameters and
+      embargo as production; same 2020-21 rule), score = (ML3 + V8) / 2. N10.
+  S2a N20: C2, top-20.          S2b N30: C2, top-30.
+  S3a SURP: (ML + V8 + surp) / 3, missing surp = 0.5. N10.
+  S3b EVENT: (ML + V8 + fresh) / 3, fresh = surp rank only within 10 trading days after the report, else 0.5. N10.
+
+Measures, per strategy, 2013-21 and 2022-26: net CAGR, Sharpe, max DD, CAPM alpha t, turnover; stationary-bootstrap
+Sharpe difference vs A; and PATH NOISE = std of net CAGR across the 5 weekly rebalance phases (decision on
+day 0..4 of each 5-day cycle), which measures how much of a result is the choice of decision day.
+S1b also reports the daily IC of ML3 vs ML (paired NW t).
+
+Decision (2013-21 only):
+  S1a, S1b, S3a, S3b candidate if Sharpe > A and CAGR > A and phase-average CAGR > A's phase-average CAGR.
+  S2a, S2b candidate if Sharpe >= A - 0.05 and path noise < A's path noise.
+  2022-26 consistency: a candidate is "consistent" if its 2022-26 Sharpe >= A and CAGR > TDEX.
+  Consistent candidates are listed as forward-shadow options; nothing changes S5 or the frozen shadows.
+
+Trials: 6 strategies + ML3 = 7. validity.TRIALS["adaptive_v1"] = 7. Phase offsets are a noise measurement, not a
+selection, and add no trials.
+frozen 2026-11-03T02:28:30Z

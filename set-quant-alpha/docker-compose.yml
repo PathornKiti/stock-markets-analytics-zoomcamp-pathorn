@@ -1,0 +1,55 @@
+# set-quant-alpha: Airflow orchestration + HTML dashboard + one-off pipeline runs.
+#
+#   docker compose up -d --build           # Airflow UI http://localhost:8080, dashboard http://localhost:8000
+#   docker compose run --rm pipeline --mode live            # one full run without Airflow
+#   docker compose logs airflow | grep -i "password"        # admin password for the Airflow UI
+#
+# Data, models and reports live in the host folders below (gitignored), so runs are
+# incremental across restarts and the dashboard container serves the latest report.
+#
+# Settings come from set-quant-alpha/.env (compose reads it automatically): LSEG_APP_KEY for the optional
+# set_quant_alpha_lseg DAG. LSEG needs LSEG Workspace running and logged in on
+# this host; the containers reach it through host.docker.internal (relay in src/setalpha/lseg.py).
+
+services:
+  airflow:
+    build:
+      context: .
+      dockerfile: airflow/Dockerfile
+    command: standalone
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__DEFAULT_TIMEZONE: Asia/Bangkok
+      AIRFLOW__WEBSERVER__DEFAULT_UI_TIMEZONE: Asia/Bangkok
+      LSEG_APP_KEY: ${LSEG_APP_KEY:-}
+      LSEG_PROXY_HOST: host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"     # Linux; Docker Desktop defines it already
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./src:/opt/setalpha/src
+      - ./scripts:/opt/setalpha/scripts
+      - ./experiments:/opt/setalpha/experiments:ro   # research outputs the pipeline and publish step read
+      - ./data:/opt/setalpha/data
+      - ./models:/opt/setalpha/models
+      - ./reports:/opt/setalpha/reports
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+  dashboard:
+    image: nginx:1.27-alpine
+    volumes:
+      - ./reports:/usr/share/nginx/html:ro
+    ports:
+      - "8000:80"
+    restart: unless-stopped
+
+  pipeline:
+    build: .
+    profiles: ["manual"]
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./reports:/app/reports
+      - ./experiments:/app/experiments:ro

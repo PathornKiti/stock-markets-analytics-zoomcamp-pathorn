@@ -1,0 +1,6 @@
+frozen 2026-11-01T16:18:53Z (before any test-split simulation)
+A = F2 ranks 31-150: hurdle 1.0
+B = F1 hurdle 1.0, no stop
+C = pick A as 17% sleeve + TDEX core (4% TE budget)
+D = F1 top-5 + buffer 15 (style-controlled; rule defined after first validation pass)
+trials = 37 (36 grid incl. 1 diagnostic + C)

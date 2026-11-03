@@ -1,0 +1,5 @@
+pick,name,family,score,universe,uni_slack,n,select,buffer,hurdle,vol_scaled,pickable,tilt,rebalance_every,sleeve,equitize,stop_loss,min_trade_frac,resize_band
+A,F2 ranks 31-150: hurdle 1.0,F2,pred_ens,"(31, 150)",25,10,hurdle,30,1.0,True,True,0.5,5,1.0,False,0.08,0.01,0.0
+B,"F1 hurdle 1.0, no stop",F1,pred_ens,"(1, 100)",0,10,hurdle,30,1.0,True,True,0.5,5,1.0,False,None,0.01,0.0
+C,C: pick A as 17% sleeve + TDEX core (4% TE budget),C,pred_ens,"(31, 150)",25,10,hurdle,30,1.0,True,True,0.5,5,0.17,True,0.08,0.01,0.0
+D,F1 top-5 + buffer 15,F1,pred_ens,"(1, 100)",0,5,buffer,15,1.0,True,True,0.5,5,1.0,False,0.08,0.01,0.0

@@ -12,7 +12,6 @@ dependencies = [
     "pandas>=2.2",
     "numpy>=1.26",
     "pyarrow>=16.0",            # parquet engine for the local data cache
-
     # --- data sources (module 1) ---
     "yfinance>=0.2.40",
     "pandas-datareader>=0.10",  # FRED, Stooq
@@ -20,33 +19,28 @@ dependencies = [
     "lxml>=5.2",                # pd.read_html backend for Wikipedia scraping
     "beautifulsoup4>=4.12",
     "html5lib>=1.1",
-
     # --- homework data drops shared as Google Drive files (module 2 Q4) ---
     "gdown>=5.2",
-
     # --- feature engineering (module 2) ---
     "ta>=0.11",                 # technical indicators used in the lectures
     "pandas-ta-classic>=0.6",   # maintained fork of pandas-ta (extra indicator set)
-
     # --- modeling (module 3) ---
     "scikit-learn>=1.5",
     "statsmodels>=0.14",
     "xgboost>=2.1",
     "joblib>=1.4",
-
     # --- visualisation ---
     "matplotlib>=3.9",
     "seaborn>=0.13",
     "plotly>=5.22",
-
     # --- notebooks ---
     "jupyterlab>=4.2",
     "ipykernel>=6.29",
     "ipywidgets>=8.1",
-
     # --- misc ---
     "python-dotenv>=1.0",
     "tqdm>=4.66",
+    "hmmlearn>=0.3",            # Gaussian HMM market regimes (capstone project)
 ]
 
 [project.urls]
@@ -67,10 +61,8 @@ dev = [
 airflow = [
     "apache-airflow>=2.9",
 ]
-
-# Opt-in deep-learning extras for the optional neural-network part of module 3.
-dl = [
-    "torch>=2.3",
+lseg = [
+    "lseg-data>=2.1.0",
 ]
 
 [build-system]
@@ -79,12 +71,12 @@ build-backend = "hatchling.build"
 
 # Two importable top-level packages share the one centralised venv:
 #   `smaz`      -> reusable helpers for every week's homework
-#   `algotrade` -> the capstone project's own library code
+#   `setalpha`  -> the capstone project's own library code (set-quant-alpha/)
 [tool.hatch.build.targets.wheel]
-packages = ["src/smaz", "project/src/algotrade"]
+packages = ["src/smaz", "set-quant-alpha/src/setalpha"]
 
 [tool.uv]
-# Install this repo itself in editable mode so `import smaz` / `import algotrade`
+# Install this repo itself in editable mode so `import smaz` / `import setalpha`
 # resolve from any notebook or script without sys.path hacks.
 package = true
 
@@ -96,6 +88,12 @@ extend-exclude = ["*.ipynb"]
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
 ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+# One-off research scripts: OHLC names (O), printf strings and loop-local lambdas are kept as written.
+"set-quant-alpha/experiments/**" = ["E741", "UP031", "B023", "E731", "SIM108", "SIM115", "F841"]
+# OHLC price frames are named O, H, L, C in the library too.
+"set-quant-alpha/src/**" = ["E741"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

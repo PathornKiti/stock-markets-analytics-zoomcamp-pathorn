@@ -1,0 +1,3 @@
+discovery decision written 2026-11-03T02:30:23.608423+00:00
+candidates (2013-21 rules): {"S1a": false, "S1b": false, "S3a": false, "S3b": false, "S2a": false, "S2b": false}
+ML3 vs ML IC 2013-21: {"IC ML": 0.08112075901153938, "IC ML3": 0.06953294807204523, "diff": -0.011587810939494157, "diff NW t": -3.731400486501662}

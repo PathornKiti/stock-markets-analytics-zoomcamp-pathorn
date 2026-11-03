@@ -1,0 +1,120 @@
+{
+ "pick": {
+  "name": "D05 50% E2 + 50% residual-momentum sleeve (4-weekly)",
+  "sleeves": [
+   {
+    "frac": 0.5,
+    "score": "pred_ens",
+    "universe": [
+     1,
+     100
+    ],
+    "uni_slack": 0,
+    "n": 10,
+    "buffer": 30,
+    "stop": 0.08,
+    "cooldown": 0,
+    "weighting": "equal",
+    "every": 1
+   },
+   {
+    "frac": 0.5,
+    "score": "resid_mom_120",
+    "universe": [
+     1,
+     100
+    ],
+    "uni_slack": 0,
+    "n": 10,
+    "buffer": 30,
+    "stop": null,
+    "cooldown": 0,
+    "weighting": "equal",
+    "every": 4
+   }
+  ],
+  "family": "D",
+  "pickable": true,
+  "composable": null,
+  "vol_manage": null,
+  "tdex_remainder": false,
+  "scale": 1.0,
+  "note": ""
+ },
+ "pcs": {
+  "name": "P-CS: pick as 20% sleeve + TDEX core (4% TE budget)",
+  "sleeves": [
+   {
+    "frac": 0.5,
+    "score": "pred_ens",
+    "universe": [
+     1,
+     100
+    ],
+    "uni_slack": 0,
+    "n": 10,
+    "buffer": 30,
+    "stop": 0.08,
+    "cooldown": 0,
+    "weighting": "equal",
+    "every": 1
+   },
+   {
+    "frac": 0.5,
+    "score": "resid_mom_120",
+    "universe": [
+     1,
+     100
+    ],
+    "uni_slack": 0,
+    "n": 10,
+    "buffer": 30,
+    "stop": null,
+    "cooldown": 0,
+    "weighting": "equal",
+    "every": 4
+   }
+  ],
+  "family": "P-CS",
+  "pickable": false,
+  "composable": null,
+  "vol_manage": null,
+  "tdex_remainder": true,
+  "scale": 0.197,
+  "note": ""
+ },
+ "combo": {
+  "name": "D11 combo: E2 + cooldown + breadth + volstop + score:v8",
+  "sleeves": [
+   {
+    "frac": 1.0,
+    "score": "pred_v8",
+    "universe": [
+     1,
+     100
+    ],
+    "uni_slack": 0,
+    "n": 20,
+    "buffer": 50,
+    "stop": "vol",
+    "cooldown": 10,
+    "weighting": "equal",
+    "every": 1
+   }
+  ],
+  "family": "D",
+  "pickable": true,
+  "composable": null,
+  "vol_manage": null,
+  "tdex_remainder": false,
+  "scale": 1.0,
+  "note": "combo of: cooldown, breadth, volstop, score:v8"
+ },
+ "trials": {
+  "cost_aware": 37,
+  "pipeline": 6,
+  "strategy_v2": 17,
+  "total": 60
+ },
+ "preds": "/Users/pathorn.kit/stock-markets-analytics-zoomcamp-pathorn/set-quant-alpha/data/processed/predictions.parquet"
+}

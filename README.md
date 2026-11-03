@@ -48,7 +48,7 @@ Module folders mirror the upstream course repo, so `homework/03-modeling/` lines
 │       ├── answers.md        # final answers, submission-ready
 │       └── notes.md          # lecture notes
 │
-├── project/                  # capstone — see project/README.md for the rubric checklist
+├── set-quant-alpha/          # capstone — see set-quant-alpha/README.md for the write-up and rubric checklist
 │   ├── notebooks/            # 01_eda → 05_report
 │   ├── src/algotrade/        # ingest → transform → model → strategy
 │   ├── scripts/run_pipeline.py
@@ -87,7 +87,7 @@ Network calls are cached to parquet on first use, so re-running a notebook top-t
 | `make airflow-deps` | Install the optional Airflow extras (module 5) |
 | `make clean` | Clear caches, keep `.venv` and data |
 
-Anything else: prefix with `uv run` (e.g. `uv run python project/scripts/run_pipeline.py --mode live`) — no manual activation needed.
+Anything else: prefix with `uv run` (e.g. `uv run python set-quant-alpha/scripts/run_pipeline.py --mode live`) — no manual activation needed.
 
 ## Progress
 
@@ -98,11 +98,11 @@ Anything else: prefix with `uv run` (e.g. `uv run python project/scripts/run_pip
 | 3 | Analytical modeling | [notebook](homework/03-modeling/) | ☐ |
 | 4 | Trading strategy and simulation | [notebook](homework/04-trading-strategy-and-simulation/) | ☐ |
 | 5 | Deployment and automation | [notebook](homework/05-deployment-and-automation/) | ☐ |
-| — | Capstone project | [project/](project/) | ☐ |
+| — | Capstone project: set-quant-alpha | [set-quant-alpha/](set-quant-alpha/) | ☐ |
 
 ## Conventions
 
-- **No data in git.** `data/` and `project/data/` are gitignored — the project rubric requires it.
+- **No data in git.** `data/` and `set-quant-alpha/data/` are gitignored — the project rubric requires it.
 - **No secrets in notebooks.** Keys live in `.env`; read them with `smaz.config.get_secret`.
 - **Notebook outputs are stripped on commit** by an `nbstripout` pre-commit hook, keeping diffs reviewable.
 - **`uv.lock` is committed** so the environment is reproducible.
@@ -112,4 +112,4 @@ Anything else: prefix with `uv run` (e.g. `uv run python project/scripts/run_pip
 
 - [`docs/setup.md`](docs/setup.md) — environment setup and troubleshooting
 - [`docs/workflow.md`](docs/workflow.md) — the weekly homework loop
-- [`project/README.md`](project/README.md) — capstone write-up and scoring checklist
+- [`set-quant-alpha/README.md`](set-quant-alpha/README.md) — capstone write-up and scoring checklist

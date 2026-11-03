@@ -1,0 +1,5 @@
+frozen 2026-11-02T04:54:14+00:00 (before any strategy_v4 test simulation)
+rule = highest 2013-2021 local-Thai (MKT/SMB/WML) alpha t among R100, R200, N100, N200
+PICK = R100 top-10 EW + buffer 30, ranks 1-100  (TH alpha 6.23%/yr, t 1.49)
+cost model = 0.0011/side + 0.5 * sigma * sqrt(trade/ADV); caps min(0.05, 0.2 x ADV)
+trials for DSR = 67 earlier + 4 here

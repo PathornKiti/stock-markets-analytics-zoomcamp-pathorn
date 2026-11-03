@@ -1,0 +1,9 @@
+,IC corr clusters (cut 0.5),LS corr clusters (cut 0.5),score corr clusters (cut 0.5)
+ml,1,1,4
+v8,1,1,4
+lowbeta,2,2,3
+lowvol,2,2,3
+resmom,4,3,1
+hi52,4,2,2
+eps,5,4,6
+divy,3,2,5

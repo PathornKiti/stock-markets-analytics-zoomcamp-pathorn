@@ -1,0 +1,15 @@
+{
+ "chosen": "V3",
+ "eligible": [
+  "V2",
+  "V3",
+  "V10",
+  "V11"
+ ],
+ "v11_base": "V3",
+ "rule": {
+  "ic_margin": 0.002,
+  "ac_tol": 0.02
+ },
+ "n_trials": 12
+}

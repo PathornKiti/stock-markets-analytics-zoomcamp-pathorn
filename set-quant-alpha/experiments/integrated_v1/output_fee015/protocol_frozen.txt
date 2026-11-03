@@ -1,0 +1,9 @@
+frozen 2026-11-02T09:40:18Z - before the first walk-forward selection / any OOS result was computed
+(the grid stage only simulated configs; no selection, no per-year ranking had been looked at)
+objective = max NET CAPM-alpha t-stat vs TDEX (daily, OLS with Newey-West 5 lags), expanding window 2013-01-01 .. Y-1-12-31
+turnover sanity = config ineligible if its two-way turnover in the selection window > 40x/yr
+WF years = 2016..2026 (2026 to 2026-10-22); one continuous simulation following the yearly schedule
+primary grid = 8 composites x N{10,20,30} x rebalance{5,10,21} x buffer{none, min(3N,80)} x weighting{EW, tilt} = 288
+pre-declared ablations: 576-grid incl. 8% stop; picks + stop; TDEX core 50/70%; IR objective; family-restricted WFs
+costs 0.15%/side stocks, 0.05% TDEX; sensitivity 0.05/0.10/0.15 (same picks and re-optimised)
+trials for DSR = 89 earlier + 576 + 6 = 671

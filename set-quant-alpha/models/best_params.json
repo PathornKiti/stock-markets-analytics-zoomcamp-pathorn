@@ -1,0 +1,20 @@
+{
+ "tree": {
+  "max_depth": 6,
+  "min_samples_leaf": 500
+ },
+ "rf": {
+  "max_depth": 8,
+  "min_samples_leaf": 200,
+  "max_features": 0.3
+ },
+ "logit": {
+  "C": 1.0
+ },
+ "xgb": {
+  "max_depth": 3,
+  "learning_rate": 0.08,
+  "n_estimators": 300,
+  "min_child_weight": 200
+ }
+}

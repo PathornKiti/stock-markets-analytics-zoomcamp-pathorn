@@ -1,0 +1,8 @@
+,pass,value
+G1 beats S5 (net CAGR and Sharpe),True,CAGR 9.98 vs 7.38; Sharpe 0.73 vs 0.57
+G2 beats TDEX (CAGR and IR > 0),True,CAGR 9.98 vs 7.16; IR 0.20
+G3 time-stable (AP - S5 > 0 in 2016-21 and 2022-26),False,+5.09 / -0.43 pp
+G4 neighbour-stable (>= 2/3 beat S5),True,5 of 5
+"G5 PBO < 0.5 (Sharpe, 2013-26)",True,0.495
+G6 Sharpe(AP) > Sharpe(S5) significant (p < 0.05),False,p = 0.132; diff 0.16
+G7 DSR > 0.95,False,0.29 at 734 trials

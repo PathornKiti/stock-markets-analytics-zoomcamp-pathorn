@@ -1,0 +1,12 @@
+{
+ "pick": "D",
+ "G1": false,
+ "G2": true,
+ "G3": true,
+ "pass all": false,
+ "holdout Sharpe diff vs A": 0.15527819153810252,
+ "95% CI": [
+  -0.33736817343978964,
+  0.6438715906034986
+ ]
+}

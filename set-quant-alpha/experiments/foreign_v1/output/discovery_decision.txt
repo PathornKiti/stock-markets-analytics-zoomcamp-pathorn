@@ -1,0 +1,11 @@
+discovery decision written 2026-11-02T17:24:49.292762+00:00
+stocks with a foreign-board line: 191
+  signal  h        IC  IC t (NW)  FM t (NW)  direction    G1    G2
+    prem  5 -0.002807  -0.336850  -1.320658       -1.0 False False
+    prem 20 -0.014949  -1.083478  -1.622386       -1.0 False False
+ dprem20  5  0.011422   1.297627   2.784438        1.0 False  True
+ dprem20 20  0.015620   1.154584   1.300840        1.0 False False
+fshare20  5  0.011084   1.827661   0.635269        1.0 False False
+fshare20 20  0.005372   0.421910   0.228120        1.0 False False
+
+no signal passed G1+G2: holdout is still computed once and reported, but nothing can pass

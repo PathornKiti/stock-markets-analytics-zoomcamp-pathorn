@@ -1,0 +1,8 @@
+{
+ "key": "C2|N10|R5|B|E",
+ "days": 3357,
+ "corr daily": 0.8780282215301314,
+ "CAGR new %": 14.649696086420171,
+ "CAGR integrated_v1 %": 15.187490463256836,
+ "note": "new = scores on all liquid rows; integrated_v1 = scores on rows with a known 5-day target"
+}

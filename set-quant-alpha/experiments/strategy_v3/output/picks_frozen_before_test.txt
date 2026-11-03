@@ -1,0 +1,5 @@
+frozen 2026-11-02T04:10:43+00:00 (before any strategy_v3 test simulation)
+rule = highest 2013-2021 local-Thai (MKT/SMB/WML) alpha t among pickable designs (E2, F1, F2, F3)
+PICK = E2 top-10 + buffer 30 + 8% stop  (TH alpha 10.16%/yr, t 2.51)
+lambdas = {"F1 enhanced index: TDEX + neutral tilts, TE 4%, cost-aware": 34.158582574128175, "F2 enhanced index: TDEX + neutral tilts, TE 8%, cost-aware": 1.0000144976760046, "F3 all-stock factor-matched (no TDEX), cost-aware": 1.0000144976760046, "A1 ablation: F2 without factor constraints": 1.0000144976760046, "A2 ablation: F2 cost-unaware": 1.0000144976760046}
+trials for DSR = 60 earlier + 7 here

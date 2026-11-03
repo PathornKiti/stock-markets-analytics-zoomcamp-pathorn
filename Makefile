@@ -33,7 +33,7 @@ test: ## Run pytest
 	uv run pytest
 
 pipeline: ## Run the capstone pipeline end-to-end (offline replay)
-	uv run project/scripts/run_pipeline.py --mode file
+	uv run set-quant-alpha/scripts/run_pipeline.py --mode file
 
 airflow-deps: ## Install the optional Airflow extras for module 5
 	uv sync --group airflow

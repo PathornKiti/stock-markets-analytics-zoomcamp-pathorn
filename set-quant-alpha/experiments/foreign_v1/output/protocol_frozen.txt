@@ -1,0 +1,38 @@
+foreign_v1 - pre-registration
+frozen 2026-11-02T17:06:52Z - before any foreign-board signal was computed or any IC was looked at
+(only the LSEG field list and 10 rows of KBANK_f.BK were seen while testing the connection)
+
+BACKGROUND: Thai stocks have a foreign ownership limit (FOL). When foreign holdings reach it, foreigners can buy only
+from other foreigners on the foreign board (<SYM>_f.BK), usually at a premium to the local board (Bailey & Jagtiani
+1994, JFE; Bailey, Chung & Kang 1999). The premium and foreign-board activity measure foreign demand that the
+local price has not absorbed. This is new information: no earlier experiment used it (all prior foreign-flow
+features were market-level baht / EEM proxies).
+
+DATA: LSEG daily foreign-board history (TRDPRC_1, ELG_ACVOL, ELG_TNOV, VWAP) for live RICs ever in SET100
+(scripts/fetch_lseg.py foreign), local close from LSEG (same split adjustment), local traded value from the
+production dataset (dvol). Targets, universe, ML/V8 scores, styles: integrated_v1 panel (tradable top-100,
+beta-adjusted forward alpha, next open -> close t+h). Delisted names have no foreign-board RIC (not covered).
+
+SIGNALS (defined a priori; a stock-day is covered only if the stock is tradable and the signal is defined)
+  prem     foreign premium = f_close / local close - 1 on days with foreign-board volume > 0, carried forward at
+           most 20 trading days. Prior: none (two-sided) - a high premium is foreign demand (+) but may mean-revert (-).
+  dprem20  prem(t) - prem(t-20). Prior: + (rising foreign demand spills over to the local line).
+  fshare20 20-day foreign-board traded value / 20-day local traded value. Prior: + (foreign-board activity =
+           foreign buying pressure at the limit).
+
+TESTS (cross-sectional, covered names only, days with >= 10 covered names)
+  T1 daily Spearman IC vs 5-day and 20-day forward alpha; Newey-West t (lags = horizon). 3 signals x 2 horizons.
+  T2 marginal value: daily Fama-MacBeth of the forward-alpha rank on ranks of [signal, C2 (S5 score),
+     log size, beta, 12-1 momentum]; NW t of the signal slope.
+  Also reported, not gated: coverage by year, IC by year, quintile spreads, IC by HMM regime.
+
+PERIODS: discovery 2013-2021 (all decisions); holdout 2022-01 -> 2026-10 computed ONCE after the discovery decision
+is written to output/discovery_decision.txt, and reported whatever it shows.
+
+GATES (per signal-horizon)
+  G1 discovery IC t >= 2 in the prior direction (prem: |t| >= 2, its sign becomes the prior for the holdout)
+  G2 discovery marginal FM slope t >= 2, same sign
+  G3 holdout IC same sign with t >= 1.5
+  Pass G1-G3 -> candidate for a new paper shadow (C2 + signal blend), to be registered separately by the user.
+  Nothing is deployed from this experiment.
+TRIALS: 6 (3 signals x 2 horizons).

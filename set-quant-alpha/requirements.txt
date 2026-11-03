@@ -1,0 +1,18 @@
+# Runtime dependencies of set-quant-alpha (used by the Docker images).
+# Locally the project runs from the repo's uv environment: `make setup` (see README).
+pandas>=2.2
+numpy>=1.26
+pyarrow>=16.0
+scipy>=1.13
+yfinance>=0.2.54
+pandas-datareader>=0.10
+requests>=2.32
+scikit-learn>=1.5
+xgboost-cpu>=2.1; sys_platform == "linux"     # CPU-only wheel: no CUDA libraries in the Docker images
+xgboost>=2.1; sys_platform != "linux"
+statsmodels>=0.14
+hmmlearn>=0.3
+joblib>=1.4
+plotly>=5.22
+python-dotenv>=1.0
+lseg-data>=2.1             # optional LSEG Workspace pulls (scripts/fetch_lseg.py, set_quant_alpha_lseg DAG)

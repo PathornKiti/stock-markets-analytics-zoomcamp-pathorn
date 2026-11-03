@@ -23,7 +23,7 @@ PROCESSED_DIR = DATA_DIR / "processed"
 CACHE_DIR = DATA_DIR / "cache"
 
 HOMEWORK_DIR = REPO_ROOT / "homework"
-PROJECT_DIR = REPO_ROOT / "project"
+PROJECT_DIR = REPO_ROOT / "set-quant-alpha"
 
 for _d in (RAW_DIR, PROCESSED_DIR, CACHE_DIR):
     _d.mkdir(parents=True, exist_ok=True)

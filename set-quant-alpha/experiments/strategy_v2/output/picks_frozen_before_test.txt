@@ -1,0 +1,7 @@
+frozen 2026-11-02T03:43:19+00:00 (before any strategy_v2 test-split simulation)
+rule = max validation local-Thai (MKT/SMB/WML) alpha t among pickable designs with 1-way turnover <= 1.1 x E2 (22.0x/yr)
+PICK = D05 50% E2 + 50% residual-momentum sleeve (4-weekly)  (valid TH alpha 23.25%/yr, t 2.37; E2 t 1.21)
+P-CS = P-CS: pick as 20% sleeve + TDEX core (4% TE budget)
+D11 combination = ['D11 combo: E2 + cooldown + breadth + volstop + score:v8']
+trials for DSR = {'cost_aware': 37, 'pipeline': 6, 'strategy_v2': 17, 'total': 60}
+NOTE: re-frozen; superseded freeze kept in picks_frozen_v1_superseded.txt (fixed before any test run: P-CS min-trade threshold blocked 1%-slot buys; pipeline trial count included a benchmark row)

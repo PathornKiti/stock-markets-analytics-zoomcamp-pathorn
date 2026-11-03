@@ -1,0 +1,21 @@
+{
+ "signals passing G1+G2+G3": {
+  "surp": [
+   5
+  ],
+  "ca": [
+   5,
+   20
+  ]
+ },
+ "pick": "F",
+ "S1": true,
+ "S2": true,
+ "S3": false,
+ "strategy pass": false,
+ "holdout Sharpe diff vs A": -0.14847034424405253,
+ "95% CI": [
+  -0.7883025288524879,
+  0.44654042475738814
+ ]
+}

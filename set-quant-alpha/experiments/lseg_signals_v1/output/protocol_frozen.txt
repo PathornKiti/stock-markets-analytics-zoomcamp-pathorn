@@ -1,0 +1,66 @@
+lseg_signals_v1 - protocol (frozen before any signal value or statistic is computed)
+
+Question. Do the other LSEG datasets (price targets, earnings announcements, SmartEstimate, forecast dispersion,
+dividend forecasts, point-in-time quarterly financials, share issuance, ESG, StarMine Combined Alpha) carry alpha
+information for SET100 stocks beyond S5's score, and does adding it improve S5 out of sample?
+
+Universe. survivorship-corrected L, tradable top-100 (fundamentals_v1 output/frame.parquet rows), delisted names included.
+Periods. Discovery 2013-01-01..2021-12-31 (all decisions). Holdout 2022-01-01..2026 (computed once, after the
+decision file is written). Targets fwd_alpha_5, fwd_alpha_20.
+
+Point-in-time rules.
+  * Monthly as-of estimate snapshots: used from the next trading day after the snapshot date, carried <= 70 trading days.
+  * Earnings (epsq, surpq): effective the trading day after the report timestamp; surprise is joined to the report
+    timestamp of the same fiscal period end. Missing report timestamp -> row dropped.
+  * Quarterly financials (finq): effective the trading day after OriginalAnnouncementDate; missing -> period end + 60
+    calendar days. TTM = sum of the last 4 quarterly rows with distinct period ends spanning <= 370 days.
+  * Shares outstanding: snapshot used from the next month (shift 21 trading days).
+  * ESG: dated by fiscal year end -> used from fiscal year end + 180 days, carried <= 300 trading days.
+  * StarMine Combined Alpha: vendor model; its pre-launch history may be backfilled. Reported, flagged, and
+    EXCLUDED from the composites so a backfilled model cannot drive the strategy result.
+  * Renamed tickers mapped as in fundamentals_v1.
+
+Signals (prior sign; score = sign x raw):
+  ptup     price-target upside: PT mean / close - 1, PT n >= 2, clip [-0.9, 3]           (+)
+  ptrev3   log(PT mean / PT mean 63 trading days earlier)                                 (+)
+  sue      (EPS_q - EPS_q-4) / sd of the last 8 seasonal differences (>= 4), 126-day life (+)
+  surp     I/B/E/S surprise % of the last quarter, clip +-100, 63-day life                (+)
+  smartdiv (SmartEstimate - consensus) / |consensus|, FY1, clip +-1                       (+)
+  disp     EPS st.dev / |consensus| FY1, clip [0, 5]                                      (-)
+  fdy      FY1 DPS mean / close                                                           (+)
+  dpsrev3  3-month change in FY1 DPS mean / |DPS 63 days earlier|, clip +-1               (+)
+  gpa      TTM gross profit / total assets                                                (+)
+  accr     (TTM net income - TTM CFO) / total assets                                      (-)
+  iss      log(shares / shares 252 trading days earlier)                                  (-)
+  esg      ESG score                                                                      (two-sided, not in composites)
+  ca       StarMine Combined Alpha country rank                                           (+, flagged, not in composites)
+
+Stage 1 (per signal, h = 5 and 20): daily Spearman IC (NW t, lags h); Fama-MacBeth slope controlling for C2,
+log size, beta, 12-1 momentum (as fundamentals_v1).
+  G1 discovery IC t >= 2 in the prior direction (|t| >= 2 for esg)
+  G2 discovery FM t >= 2 in the prior direction
+  G3 holdout IC t >= 2 in the same direction
+  A signal "passes" only with G1, G2, G3 at the same horizon.
+
+Stage 2 (composites, ranks within date, missing = 0.5):
+  LC_all = equal blend of the 11 signals ptup..iss (sign-adjusted)
+  LC_sel = equal blend of the signals passing G1 and G2 at h = 5 or h = 20 in discovery (empty -> not formed)
+  FC     = fundamentals_v1 blend (existing)
+
+Stage 3 (strategies, top-10, buffer 30, weekly, EW, 0.168%/side, iv.fast_sim, L panel):
+  A  C2 (S5 baseline)
+  E  (ML + V8 + LC_sel) / 3          (only if LC_sel is formed)
+  F  (ML + V8 + LC_all) / 3
+  G  (ML + V8 + FC + LC_all) / 4
+  Pick = max net CAPM alpha t in 2013-21 among E/F/G.
+  Gate S1 information: pick's added composite (LC_sel for E, LC_all for F and G) has discovery FM t >= 2 at h = 5.
+  Gate S2: pick beats A on 2013-21 net CAGR and Sharpe.
+  Gate S3 (holdout, once): pick Sharpe >= A and CAGR > TDEX; stationary-bootstrap Sharpe difference reported.
+  Pass = S1 and S2 and S3. A pass is a candidate for a forward-only paper shadow (registered by the user), not a
+  change to S5 or to any frozen shadow.
+
+Not done, by design: no ML refit with these features (fundamentals_v1 showed the pooled refit ignores rotating
+fundamental signals); no parameter search; no change to costs, sizing or rebalance.
+
+Trials: 26 signal tests + 2 composites + 3 strategies = 31; validity.TRIALS["lseg_signals_v1"] = 31.
+frozen 2026-11-03T01:58:42Z

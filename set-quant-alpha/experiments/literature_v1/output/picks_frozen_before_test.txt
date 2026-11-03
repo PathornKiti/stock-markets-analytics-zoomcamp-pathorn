@@ -1,0 +1,4 @@
+frozen 2026-11-02T09:17:41+00:00 (before any literature_v1 test simulation)
+rule = highest 2013-2021 worst-case net alpha t across CAPM, local-Thai Carhart and FF-EM Carhart
+PICK = L5 multi-factor (L2+L3+L4)  (worst net alpha t 0.68)
+trials = 71 earlier strategy designs + 6 here

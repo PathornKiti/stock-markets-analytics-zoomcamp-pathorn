@@ -1,0 +1,9 @@
+,raw t >= 2,|t +styles| < 2,R2 on styles+sector > 0.5,style beta (H1 flag),sign flips with controls
+ml,True,False,True,True,False
+v8,True,False,True,True,False
+lowbeta,False,True,True,True,True
+lowvol,True,True,True,True,False
+resmom,True,True,True,True,False
+hi52,True,True,True,True,False
+eps,True,False,False,False,False
+divy,True,False,False,False,False

@@ -1,0 +1,36 @@
+survivorship_v1 - pre-registration
+frozen 2026-11-02T17:04:09Z - before any dataset, score or simulation of this experiment was built
+
+QUESTION: how much does survivorship bias (today's Yahoo listings only) flatter the S5 rule's backtest?
+
+DATA
+  Y (biased)    : production Yahoo prices (853 tickers listed today), unchanged.
+  L (corrected) : Y + LSEG daily prices for every RIC that was ever in SET100 (2009-2026) and is missing from Y,
+                  delisted RICs (suffix ^) included. LSEG prices are split-adjusted; dividend adjustment rebuilt from
+                  LSEG daily total return (TR.TotalReturn). A missing RIC whose daily returns correlate > 0.95 with an
+                  existing Yahoo ticker over >= 250 overlapping days is a renamed duplicate and is dropped.
+  Everything else (market, FRED, Cboe, sectors, Fama-French) identical in both.
+
+PIPELINE (identical code for Y and L, isolated data dir per variant; production data/models untouched)
+  transform.build_dataset -> ML ensemble (production members + best_params.json) walk-forward: refit every January
+  2013-2019 and 2022-2026 on all earlier labelled rows (5-day embargo); 2020-21 scored by the train-only (<2020) fit,
+  as in production -> V8 (model_v2 spec, refit every January 2013-2026) -> per-date ranks inside the tradable top-100.
+  Scores are produced for ALL liquid rows (not only rows with a known forward return), so a stock about to delist
+  is not dropped from the universe early.
+
+STRATEGY (fixed, nothing selected): S5 rule = C2 (mean rank ML, V8), top-10, hold buffer 30, rebalance every 5 trading
+  days, equal weight, no stop, next-open fills, 0.168% per side (config.FEE_PER_SIDE), integrated_v1.fast_sim.
+  Delisting: after a stock's last LSEG price, its open is set to that last close so a held position is sold there
+  (delisting return 0; no tender premium or wipe-out assumed).
+
+OUTPUTS (all reported, whichever way they go)
+  1. Coverage: share of SET100 member-days missing from Y, by year.
+  2. Index-level bias, one source (LSEG total return): EW return of all SET100 members vs members present in Y.
+  3. Universe bias: EW tradable top-100 return, L vs Y.
+  4. S5 rule, L vs Y: CAGR, Sharpe, max DD, CAPM alpha (t) vs TDEX; 2013-26, 2013-21, 2022-26.
+  5. Signal: daily rank IC of C2 vs 5-day alpha in the tradable universe, L vs Y.
+  6. Replication check: Y run vs the existing S5-rule fast sim (integrated_v1 grid key C2|N10|R5|B|E).
+
+DECISION RULE: none - this is a robustness check of an existing rule, not a selection. The corrected (L) numbers
+  replace the biased ones as the honest estimate in result.md if they differ by more than 0.5 point of CAGR.
+TRIALS: 1 (one evaluation of an existing rule on a new dataset; no search).
